@@ -2,6 +2,7 @@ package com.example.william.mqttskeleton;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.SeekBar;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
@@ -18,14 +19,16 @@ public class MqttHelper {
 
 
     //SET THESE VALUES AS PLEASED
-    final String serverUri = "172.19.1.89";
+    final String serverUri = "tcp://192.168.43.207";
 
     final String clientId = "Android Client";
-    final String subscriptionTopic = "Home";
 
-    final String username = "";
-    final String password = "";
+    final String topic1 = "Right";
+    final String topic2 = "Left";
+    final String topic3 = "Stop";
 
+    final String username = "Thing1";
+    final String password = "Thing2";
 
 
 
@@ -78,7 +81,9 @@ public class MqttHelper {
                     disconnectedBufferOptions.setPersistBuffer(false);
                     disconnectedBufferOptions.setDeleteOldestMessages(false);
                     mqttAndroidClient.setBufferOpts(disconnectedBufferOptions);
-                    subscribeToTopic();
+                    subscribeToTopic(topic1);
+                    subscribeToTopic(topic2);
+                    subscribeToTopic(topic3);
                 }
 
                 @Override
@@ -94,9 +99,9 @@ public class MqttHelper {
     }
 
 
-    public void subscribeToTopic() {
+    public void subscribeToTopic(String topic) {
         try {
-            mqttAndroidClient.subscribe(subscriptionTopic, 0, null, new IMqttActionListener() {
+            mqttAndroidClient.subscribe(topic, 0, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.w("Mqtt","Subscribed!");
@@ -114,9 +119,9 @@ public class MqttHelper {
         }
     }
 
-    public void publish(byte[] msg){
+    public void publish(byte[] msg, String topic){
         try{
-            mqttAndroidClient.publish(subscriptionTopic,msg,0,false);
+            mqttAndroidClient.publish(topic,msg,0,false);
         } catch (MqttException ex){
             System.err.println("Exception whilst subscribing");
             ex.printStackTrace();
