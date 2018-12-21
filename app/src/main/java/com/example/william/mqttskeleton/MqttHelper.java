@@ -2,6 +2,7 @@ package com.example.william.mqttskeleton;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.SeekBar;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
@@ -18,20 +19,20 @@ public class MqttHelper {
 
 
     //SET THESE VALUES AS PLEASED
-    final String serverUri = "tcp://192.168.43.207";
+    final String serverUri = "tcp://172.19.1.89";
 
     final String clientId = "Android Client";
+
     final String topic1 = "Right";
     final String topic2 = "Left";
+    final String topic3 = "Stop";
 
-    final String username = "turtle";
-    final String password = "fiveturtles";
+    final String username = "Thing1";
+    final String password = "Thing2";
 
-    Context context;
 
 
     public MqttHelper(Context context){
-        this.context = context;
         mqttAndroidClient = new MqttAndroidClient(context, serverUri, clientId);
         mqttAndroidClient.setCallback(new MqttCallbackExtended() {
             @Override
@@ -67,10 +68,10 @@ public class MqttHelper {
         mqttConnectOptions.setCleanSession(false);
         mqttConnectOptions.setUserName(username);
         mqttConnectOptions.setPassword(password.toCharArray());
-        Log.d("connect","connect options is set up");
+
         try {
 
-            mqttAndroidClient.connect(mqttConnectOptions, context, new IMqttActionListener() {
+            mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
 
@@ -82,6 +83,7 @@ public class MqttHelper {
                     mqttAndroidClient.setBufferOpts(disconnectedBufferOptions);
                     subscribeToTopic(topic1);
                     subscribeToTopic(topic2);
+                    subscribeToTopic(topic3);
                 }
 
                 @Override
